@@ -43,7 +43,7 @@ Moreover, other successful projects such as [sample-user/coming-soon](https://gi
 
 ## Privacy Statement
 
-This project recognises the importance of privacy and is committed to protecting the privacy of its users. This project does not collect, record, or store any text entered by users or returned by the OpenAI server in any manner. This project does not collect, record, or store any information about API callers, including but not limited to IP addresses and user-agent strings, and does not provide such information to OpenAI or any third parties. The source code of this project is available for inspection to verify this statement.
+This project highly values privacy and is committed to safeguarding the privacy of its users. This project does not collect, record, or store any text entered by users or returned by the OpenAI server in any manner. This project does not provide any information to OpenAI or any third parties about the identity of API callers, including but not limited to IP addresses and user-agent strings. The source code of this project is available for inspection to verify this statement.
 
 However, the OpenAI API does retain data for 30 days in accordance with its [data usage policies](https://platform.openai.com/docs/data-usage-policies).
 
