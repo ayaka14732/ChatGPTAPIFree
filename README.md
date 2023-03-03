@@ -16,9 +16,9 @@ For instance, to generate a response to the prompt "Hello, how are you?" using t
 curl https://chatgpt-api.shn.hk/v1/ \
   -H 'Content-Type: application/json' \
   -d '{
-    "model": "gpt-3.5-turbo",
-    "messages": [{"role": "user", "content": "Hello, how are you?"}]
-  }'
+  "model": "gpt-3.5-turbo",
+  "messages": [{"role": "user", "content": "Hello, how are you?"}]
+}'
 ```
 
 You can view the full API documentation on the [OpenAI official documentation](https://platform.openai.com/docs/api-reference/chat/create) page.

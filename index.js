@@ -2,9 +2,13 @@ const UPSTREAM_URL = 'https://api.openai.com/v1/chat/completions';
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET,POST,PUT,PATCH,DELETE,OPTIONS',
+  'Access-Control-Allow-Methods': 'GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS, BREW',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-  'Access-Control-Max-Age': '86400',
+};
+
+const STREAM_HEADERS = {
+  'Content-Type': 'text/event-stream',
+  'Connection': 'keep-alive',
 };
 
 const handleRequest = async (request, env) => {
@@ -16,24 +20,19 @@ const handleRequest = async (request, env) => {
   }
 
   const { stream } = requestBody;
-  if (stream != null && stream !== true) {
-    return new Response('The `stream` parameter must be set to true', { status: 400, header: CORS_HEADERS });
+  if (stream != null && stream !== true && stream !== false) {
+    return new Response('The `stream` parameter must be a boolean value', { status: 400, header: CORS_HEADERS });
   }
-
-  const newBody = JSON.stringify({
-    ...requestBody,
-    stream: true,
-  });
 
   try {
     const upstreamResponse = await fetch(UPSTREAM_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${env.API_KEY}`,
+        'Authorization': `Bearer ${env.API_KEY}`,
         'User-Agent': 'curl/7.64.1',
       },
-      body: newBody,
+      body: JSON.stringify(requestBody),
     });
 
     if (!upstreamResponse.ok) {
@@ -45,9 +44,8 @@ const handleRequest = async (request, env) => {
     return new Response(upstreamResponse.body, {
       headers: {
         ...CORS_HEADERS,
-        'Content-Type': 'text/event-stream',
+        ...(stream && STREAM_HEADERS),
         'Cache-Control': 'no-cache',
-        Connection: 'keep-alive',
       },
     });
   } catch (error) {
@@ -64,7 +62,12 @@ export default {
     }
 
     if (request.method === 'OPTIONS') {
-      return new Response(null, { headers: CORS_HEADERS });
+      return new Response(null, {
+        headers: {
+          ...CORS_HEADERS,
+          'Access-Control-Max-Age': '1728000',
+        },
+      });
     }
 
     if (request.method !== 'POST') {

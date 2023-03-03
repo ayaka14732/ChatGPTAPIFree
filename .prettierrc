@@ -1,4 +1,5 @@
 {
   "printWidth": 1400,
-  "singleQuote": true
+  "singleQuote": true,
+  "quoteProps": "consistent"
 }
