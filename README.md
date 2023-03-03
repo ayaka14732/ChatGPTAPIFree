@@ -47,15 +47,30 @@ This project recognises the importance of privacy and is committed to protecting
 
 However, the OpenAI API does retain data for 30 days in accordance with its [data usage policies](https://platform.openai.com/docs/data-usage-policies).
 
-## Host your own instance
+## Host Your Own Instance
 
-You can also run your own instance of the ChatGPT API Free project. Simply follow these steps:
+If you'd like to run your own instance of the ChatGPT API Free project, you can easily do so by following these steps:
 
-- Fork the repository.
-- Sign up for a CloudFlare account (if you don't have one already).
-- Deploy the code to a CloudFlare Worker, following the instructions in the README file.
-- Add your own OpenAI API key as an environment variable.
-- Share your API endpoint with others.
+### Setup OpenAI
+
+1. Create an OpenAI account (if you don't have one already)
+1. Obtain an OpenAI API Key from [OpenAI API Keys](https://platform.openai.com/account/api-keys)
+
+### Setup Cloudflare
+
+1. Create a Cloudflare account (if you don't have one already)
+1. Create a Cloudflare Worker named "chatgpt-api"
+1. You can add custom domains for your Cloudflare worker by following the instructions on [Build a Custom Domain](https://developers.cloudflare.com/workers/platform/triggers/custom-domains/#build-a-custom-domain)
+1. In the Cloudflare Worker, add an environment variable `API_KEY` using the dashboard, which should contain your OpenAI API Key. For more information on adding environment variables, see [Adding Environment Variables via the Dashboard](https://developers.cloudflare.com/workers/platform/environment-variables/#adding-environment-variables-via-the-dashboard)
+1. Create a Cloudflare API token by following the instructions on [Create a Cloudflare API token](https://developers.cloudflare.com/workers/wrangler/ci-cd/#create-a-cloudflare-api-token)
+
+### Setup GitHub
+
+1. Create a GitHub account (if you don't have one already)
+1. Fork this repository
+1. In your forked repository, create an encrypted secret named `CF_API_TOKEN`, which should contain your Cloudflare API token. For more information on creating encrypted secrets, see [Creating Encrypted Secrets for a Repository](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+1. Run the Deploy action to deploy your changes to Cloudflare
+1. Wait for the action to complete and you're done! Share your API endpoint with others
 
 ## Improve this project
 
