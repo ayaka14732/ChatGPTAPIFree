@@ -1,10 +1,10 @@
 # ChatGPT API Free
 
-Welcome to the ChatGPT API Free project, a simple and open-source proxy API that allows you to access OpenAI's ChatGPT API without the need for an API key.
+Welcome to the ChatGPT API Free project, a simple and open-source proxy API that allows you to access OpenAI's ChatGPT API for free.
 
 ## Usage
 
-To use the ChatGPT API Free, simply send a POST request to the following endpoint:
+To use ChatGPT API Free, simply send a POST request to the following endpoint:
 
 ```
 https://chatgpt-api.shn.hk/v1/
@@ -21,7 +21,7 @@ curl https://chatgpt-api.shn.hk/v1/ \
 }'
 ```
 
-You can view the full API documentation on the [OpenAI official documentation](https://platform.openai.com/docs/api-reference/chat/create) page.
+You can view the full API documentation on the [OpenAI official documentation](https://platform.openai.com/docs/api-reference/chat/create).
 
 ## Introduction
 
@@ -49,7 +49,7 @@ However, the OpenAI API does retain data for 30 days in accordance with its [dat
 
 ## Host Your Own Instance
 
-If you'd like to run your own instance of the ChatGPT API Free project, you can easily do so by following these steps:
+If you'd like to run your own instance of ChatGPT API Free, you can easily do so by following these steps:
 
 ### Setup OpenAI
 
@@ -60,7 +60,7 @@ If you'd like to run your own instance of the ChatGPT API Free project, you can 
 
 1. Create a Cloudflare account (if you don't have one already)
 1. Create a Cloudflare Worker named "chatgpt-api"
-1. You can add custom domains for your Cloudflare worker by following the instructions on [Build a Custom Domain](https://developers.cloudflare.com/workers/platform/triggers/custom-domains/#build-a-custom-domain)
+1. Optionally, you can add custom domains for your Cloudflare worker by following the instructions on [Build a Custom Domain](https://developers.cloudflare.com/workers/platform/triggers/custom-domains/#build-a-custom-domain)
 1. In the Cloudflare Worker, add an environment variable `API_KEY` using the dashboard, which should contain your OpenAI API Key. For more information on adding environment variables, see [Adding Environment Variables via the Dashboard](https://developers.cloudflare.com/workers/platform/environment-variables/#adding-environment-variables-via-the-dashboard)
 1. Create a Cloudflare API token by following the instructions on [Create a Cloudflare API token](https://developers.cloudflare.com/workers/wrangler/ci-cd/#create-a-cloudflare-api-token)
 
@@ -78,4 +78,4 @@ This project is always seeking ways to improve and welcomes feedback and contrib
 
 ## Sponsor me!
 
-If you find ChatGPT API Free useful, please consider [sponsoring me on GitHub](https://github.com/sponsors/ayaka14732) to support ongoing development and maintenance. Your support would help me maintain this project and continue to make AI technology accessible for all. Thank you for your support!
+If you find ChatGPT API Free useful, please consider [sponsoring the author](https://github.com/sponsors/ayaka14732) on GitHub to support ongoing development and maintenance. Your support would help her maintain this project and continue to make AI technology accessible for all. Thank you for your support!
