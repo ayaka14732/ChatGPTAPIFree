@@ -1,0 +1,8 @@
+name = "chatgpt-api"
+main = "src/index.js"
+compatibility_date = "2023-03-03"
+usage_model = "bundled"
+env = { }
+
+[triggers]
+crons = [ ]

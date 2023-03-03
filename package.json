@@ -1,0 +1,12 @@
+{
+  "name": "chatgpt-api",
+  "version": "0.0.0",
+  "devDependencies": {
+    "wrangler": "2.10.0"
+  },
+  "private": true,
+  "scripts": {
+    "start": "wrangler dev",
+    "deploy": "wrangler publish"
+  }
+}
