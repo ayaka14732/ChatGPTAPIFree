@@ -8,5 +8,8 @@
   "scripts": {
     "start": "wrangler dev",
     "deploy": "wrangler publish"
+  },
+  "dependencies": {
+    "moment": "^2.29.4"
   }
 }

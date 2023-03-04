@@ -61,13 +61,16 @@ If you'd like to run your own instance of ChatGPT API Free, you can easily do so
 1. Create a Cloudflare account (if you don't have one already)
 1. Create a Cloudflare Worker named "chatgpt-api"
 1. Optionally, you can add custom domains for your Cloudflare worker by following the instructions on [Build a Custom Domain](https://developers.cloudflare.com/workers/platform/triggers/custom-domains/#build-a-custom-domain)
+1. In the KV page of the [Workers dashboard](https://dash.cloudflare.com/?to=/:account/workers/kv/namespaces), create a Workers KV named "chatgpi-api", then record its Workers KV ID for later use
 1. In the Cloudflare Worker, add an environment variable `API_KEY` using the dashboard, which should contain your OpenAI API Key. For more information on adding environment variables, see [Adding Environment Variables via the Dashboard](https://developers.cloudflare.com/workers/platform/environment-variables/#adding-environment-variables-via-the-dashboard)
+1. In the Cloudflare Worker, add an environment variable `SECRET_KEY` using the dashboard, which should be a long-enough random string
 1. Create a Cloudflare API token by following the instructions on [Create a Cloudflare API token](https://developers.cloudflare.com/workers/wrangler/ci-cd/#create-a-cloudflare-api-token)
 
 ### Setup GitHub
 
 1. Create a GitHub account (if you don't have one already)
 1. Fork this repository
+1. Modify `wrangler.toml`, change the `id` in `kv_namespaces` to the Workers KV ID above
 1. In your forked repository, create an encrypted secret named `CF_API_TOKEN`, which should contain your Cloudflare API token. For more information on creating encrypted secrets, see [Creating Encrypted Secrets for a Repository](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
 1. Run the Deploy action to deploy your changes to Cloudflare
 1. Wait for the action to complete and you're done! Share your API endpoint with others
