@@ -1,6 +1,7 @@
 import moment from 'moment';
 
 const UPSTREAM_URL = 'https://api.openai.com/v1/chat/completions';
+const ORG_ID_REGEX = /\borg-[a-zA-Z0-9]{24}\b/g; // used to obfuscate any org IDs in the response text
 const MAX_REQUESTS = 1024; // maximum number of requests per IP address per hour
 
 const CORS_HEADERS = {
@@ -74,7 +75,8 @@ const handleRequest = async (request, env) => {
     if (!upstreamResponse.ok) {
       const { status } = upstreamResponse;
       const text = await upstreamResponse.text();
-      return new Response(`OpenAI API responded with:\n\n${text}`, { status, header: CORS_HEADERS });
+      const textObfuscated = text.replace(ORG_ID_REGEX, 'org-************************');
+      return new Response(`OpenAI API responded with:\n\n${textObfuscated}`, { status, header: CORS_HEADERS });
     }
 
     // Update the rate limit information
