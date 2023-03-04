@@ -2,6 +2,10 @@
 
 Welcome to the ChatGPT API Free project, a simple and open-source proxy API that allows you to access OpenAI's ChatGPT API for free.
 
+## News
+
+**2023-03-04**: Check out the [ChatGPT Free App](https://freechatgpt.chat/), an amazing open-source web application that allows you to interact with OpenAI's ChatGPT API for free. It is built on top of this project.
+
 ## Usage
 
 To use ChatGPT API Free, simply send a POST request to the following endpoint:
@@ -39,7 +43,7 @@ This simple proxy API acts as a bridge between you and the OpenAI ChatGPT API. Y
 
 The ChatGPT API Free project is a game-changer for the AI development community. With the proxy API, anyone can access the state-of-the-art ChatGPT model without needing a key. This accessibility fosters creativity, innovation, and collaboration among developers, and could potentially lead to groundbreaking advancements in AI technology.
 
-Moreover, other successful projects such as [sample-user/coming-soon](https://github.com/sample-user/coming-soon) build on top of this API, showing the vast potential of this project.
+Moreover, other successful projects such as [ChatGPT Free App](https://freechatgpt.chat/) build on top of this API, showing the vast potential of this project.
 
 ## Privacy Statement
 
