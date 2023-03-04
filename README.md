@@ -66,7 +66,7 @@ If you'd like to run your own instance of ChatGPT API Free, you can easily do so
 1. Create a Cloudflare Worker named "chatgpt-api"
 1. Optionally, you can add custom domains for your Cloudflare worker by following the instructions on [Build a Custom Domain](https://developers.cloudflare.com/workers/platform/triggers/custom-domains/#build-a-custom-domain)
 1. In the KV page of the [Workers dashboard](https://dash.cloudflare.com/?to=/:account/workers/kv/namespaces), create a Workers KV named "chatgpi-api", then record its Workers KV ID for later use
-1. In the Cloudflare Worker, add an environment variable `API_KEY` using the dashboard, which should contain your OpenAI API Key. For more information on adding environment variables, see [Adding Environment Variables via the Dashboard](https://developers.cloudflare.com/workers/platform/environment-variables/#adding-environment-variables-via-the-dashboard)
+1. In the Cloudflare Worker, add an environment variable `API_KEYS` using the dashboard, which should be a JSON list of strings that contains at least one OpenAI API Key. For more information on adding environment variables, see [Adding Environment Variables via the Dashboard](https://developers.cloudflare.com/workers/platform/environment-variables/#adding-environment-variables-via-the-dashboard)
 1. In the Cloudflare Worker, add an environment variable `SECRET_KEY` using the dashboard, which should be a long-enough random string
 1. Create a Cloudflare API token by following the instructions on [Create a Cloudflare API token](https://developers.cloudflare.com/workers/wrangler/ci-cd/#create-a-cloudflare-api-token)
 

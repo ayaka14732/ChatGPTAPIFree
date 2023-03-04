@@ -22,6 +22,8 @@ const sha256 = async (message) => {
   return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
 };
 
+const randomChoice = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
 // Define an async function that hashes user IP address, UTC year, month, day, day of the week, hour and the secret key
 //
 // To implement IP-based rate limiting, we have to store users' IP addresses in a certain way. However, we want to protect
@@ -58,11 +60,12 @@ const handleRequest = async (request, env) => {
     }
 
     // Forward a POST request to the upstream URL and return the response
+    const api_key = randomChoice(JSON.parse(env.API_KEYS));
     const upstreamResponse = await fetch(UPSTREAM_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${env.API_KEY}`,
+        'Authorization': `Bearer ${api_key}`,
         'User-Agent': 'curl/7.64.1',
       },
       body: JSON.stringify(requestBody),
