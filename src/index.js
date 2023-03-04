@@ -14,6 +14,7 @@ const STREAM_HEADERS = {
   'Connection': 'keep-alive',
 };
 
+// Define an async function that hashes a string with SHA-256
 const sha256 = async (message) => {
   const data = new TextEncoder().encode(message);
   const hashBuffer = await crypto.subtle.digest('SHA-256', data);
@@ -21,6 +22,14 @@ const sha256 = async (message) => {
   return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
 };
 
+// Define an async function that hashes user IP address, UTC year, month, day, day of the week, hour and the secret key
+//
+// To implement IP-based rate limiting, we have to store users' IP addresses in a certain way. However, we want to protect
+// users' privacy as much as possible. To achieve this, we use SHA-256 to calculate a digest value of the user's IP address
+// along with the UTC year, month, day, day of the week, hour, and the secret key. The resulting digest not only depends on
+// the user's IP address but is also unique to each hour, making the user's IP address hard to be determined. Moreover, the
+// one-way nature of the SHA-256 algorithm implies that even if the digest value is compromised, it is almost impossible to
+// reverse it to obtain the original IP address, ensuring the privacy and security of the user's identity.
 const hashIp = (ip, utcNow, secret_key) => sha256(`${utcNow.format('ddd=DD.MM-HH+YYYY')}-${ip}:${secret_key}`);
 
 const handleRequest = async (request, env) => {
@@ -36,19 +45,19 @@ const handleRequest = async (request, env) => {
     return new Response('The `stream` parameter must be a boolean value', { status: 400, header: CORS_HEADERS });
   }
 
-  // Enforcing the rate limit
-  const utcNow = moment.utc();
-  const clientIp = request.headers.get('CF-Connecting-IP');
-  const clientIpHash = await hashIp(clientIp, utcNow, env.SECRET_KEY);
-
-  const rateLimitKey = `rate_limit_${clientIpHash}`;
-  const rateLimitData = (await env.kv.get(rateLimitKey, { type: 'json' })) || {};
-  const { rateLimitCount = 0, rateLimitExpiration = utcNow.startOf('hour').add(1, 'hour').unix() } = rateLimitData;
-  if (rateLimitCount > MAX_REQUESTS) {
-    return new Response('Too many requests', { status: 429, header: CORS_HEADERS });
-  }
-
   try {
+    // Enforce the rate limit based on hashed client IP address
+    const utcNow = moment.utc();
+    const clientIp = request.headers.get('CF-Connecting-IP');
+    const clientIpHash = await hashIp(clientIp, utcNow, env.SECRET_KEY);
+    const rateLimitKey = `rate_limit_${clientIpHash}`;
+    const rateLimitData = (await env.kv.get(rateLimitKey, { type: 'json' })) || {};
+    const { rateLimitCount = 0, rateLimitExpiration = utcNow.startOf('hour').add(1, 'hour').unix() } = rateLimitData;
+    if (rateLimitCount > MAX_REQUESTS) {
+      return new Response('Too many requests', { status: 429, header: CORS_HEADERS });
+    }
+
+    // Forward a POST request to the upstream URL and return the response
     const upstreamResponse = await fetch(UPSTREAM_URL, {
       method: 'POST',
       headers: {
