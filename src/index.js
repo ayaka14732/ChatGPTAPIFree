@@ -1,7 +1,7 @@
 import moment from 'moment';
 
 const UPSTREAM_URL = 'https://api.openai.com/v1/chat/completions';
-const MAX_REQUESTS = 2147483647; // maximum number of requests per IP address per hour
+const MAX_REQUESTS = 1024; // maximum number of requests per IP address per hour
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
