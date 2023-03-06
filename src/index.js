@@ -25,6 +25,8 @@ const sha256 = async (message) => {
 
 const randomChoice = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
+const obfuscateOpenAIResponse = (text) => text.replace(ORG_ID_REGEX, 'org-************************').replace(' Please add a payment method to your account to increase your rate limit. Visit https://platform.openai.com/account/billing to add a payment method.', '');
+
 // Define an async function that hashes user IP address, UTC year, month, day, day of the week, hour and the secret key
 //
 // To implement IP-based rate limiting, we have to store users' IP addresses in a certain way. However, we want to protect
@@ -75,7 +77,7 @@ const handleRequest = async (request, env) => {
     if (!upstreamResponse.ok) {
       const { status } = upstreamResponse;
       const text = await upstreamResponse.text();
-      const textObfuscated = text.replace(ORG_ID_REGEX, 'org-************************');
+      const textObfuscated = obfuscateOpenAIResponse(text);
       return new Response(`OpenAI API responded with:\n\n${textObfuscated}`, { status, headers: CORS_HEADERS });
     }
 
