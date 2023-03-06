@@ -40,12 +40,12 @@ const handleRequest = async (request, env) => {
   try {
     requestBody = await request.json();
   } catch (error) {
-    return new Response('Malformed JSON', { status: 422, header: CORS_HEADERS });
+    return new Response('Malformed JSON', { status: 422, headers: CORS_HEADERS });
   }
 
   const { stream } = requestBody;
   if (stream != null && stream !== true && stream !== false) {
-    return new Response('The `stream` parameter must be a boolean value', { status: 400, header: CORS_HEADERS });
+    return new Response('The `stream` parameter must be a boolean value', { status: 400, headers: CORS_HEADERS });
   }
 
   try {
@@ -57,7 +57,7 @@ const handleRequest = async (request, env) => {
     const rateLimitExpiration = utcNow.startOf('hour').add(1, 'hour').unix();
     const { rateLimitCount = 0 } = (await env.kv.get(rateLimitKey, { type: 'json' })) || {};
     if (rateLimitCount > MAX_REQUESTS) {
-      return new Response('Too many requests', { status: 429, header: CORS_HEADERS });
+      return new Response('Too many requests', { status: 429, headers: CORS_HEADERS });
     }
 
     // Forward a POST request to the upstream URL and return the response
@@ -76,7 +76,7 @@ const handleRequest = async (request, env) => {
       const { status } = upstreamResponse;
       const text = await upstreamResponse.text();
       const textObfuscated = text.replace(ORG_ID_REGEX, 'org-************************');
-      return new Response(`OpenAI API responded with:\n\n${textObfuscated}`, { status, header: CORS_HEADERS });
+      return new Response(`OpenAI API responded with:\n\n${textObfuscated}`, { status, headers: CORS_HEADERS });
     }
 
     // Update the rate limit information
