@@ -2,7 +2,7 @@ import moment from 'moment';
 
 const UPSTREAM_URL = 'https://api.openai.com/v1/chat/completions';
 const ORG_ID_REGEX = /\borg-[a-zA-Z0-9]{24}\b/g; // used to obfuscate any org IDs in the response text
-const MAX_REQUESTS = 1024; // maximum number of requests per IP address per hour
+const MAX_REQUESTS = 32; // maximum number of requests per IP address per hour
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
