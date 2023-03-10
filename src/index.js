@@ -1,31 +1,31 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
+
+import crypto from 'crypto';
+import express from 'express';
+import fetch from 'node-fetch';
 import moment from 'moment';
+import { MongoClient } from 'mongodb';
 
-const UPSTREAM_URL = 'https://api.openai.com/v1/chat/completions';
-const ORG_ID_REGEX = /\borg-[a-zA-Z0-9]{24}\b/g; // used to obfuscate any org IDs in the response text
-const MAX_REQUESTS = 24; // maximum number of requests per IP address per hour
+const port = parseInt(process.env.PORT || '3000', 10);
+const maxRequests = parseInt(process.env.MAX_REQUESTS || '1024', 10); // maximum number of requests per IP address per hour
+const api_keys = JSON.parse(process.env.API_KEYS);
+const { MONGODB_URI: uri, DB_NAME: dbName, SECRET_KEY: secretKey } = process.env;
 
-const CORS_HEADERS = {
+const upstreamUrl = 'https://api.openai.com/v1/chat/completions';
+const collectionName = 'rate_limits';
+
+const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS, BREW',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 };
 
-const STREAM_HEADERS = {
-  'Content-Type': 'text/event-stream',
-  'Connection': 'keep-alive',
-};
-
-// Define an async function that hashes a string with SHA-256
-const sha256 = async (message) => {
-  const data = new TextEncoder().encode(message);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
-};
+const sha256 = (data) => crypto.createHash('sha256').update(data).digest('hex');
 
 const randomChoice = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
-const obfuscateOpenAIResponse = (text) => text.replace(ORG_ID_REGEX, 'org-************************').replace(' Please add a payment method to your account to increase your rate limit. Visit https://platform.openai.com/account/billing to add a payment method.', '');
+const obfuscateOpenAIResponse = (text) => text.replace(/\borg-[a-zA-Z0-9]{24}\b/g, 'org-************************').replace(' Please add a payment method to your account to increase your rate limit. Visit https://platform.openai.com/account/billing to add a payment method.', '');
 
 // Define an async function that hashes user IP address, UTC year, month, day, day of the week, hour and the secret key
 //
@@ -35,92 +35,127 @@ const obfuscateOpenAIResponse = (text) => text.replace(ORG_ID_REGEX, 'org-******
 // the user's IP address but is also unique to each hour, making the user's IP address hard to be determined. Moreover, the
 // one-way nature of the SHA-256 algorithm implies that even if the digest value is compromised, it is almost impossible to
 // reverse it to obtain the original IP address, ensuring the privacy and security of the user's identity.
-const hashIp = (ip, utcNow, secret_key) => sha256(`${utcNow.format('ddd=DD.MM-HH+YYYY')}-${ip}:${secret_key}`);
+const hashIp = (ip, currentHour, secretKey) => sha256(`${currentHour}-${ip}:${secretKey}`);
 
-const handleRequest = async (request, env) => {
-  let requestBody;
-  try {
-    requestBody = await request.json();
-  } catch (error) {
-    return new Response('Malformed JSON', { status: 422, headers: CORS_HEADERS });
+const app = express();
+app.disable('etag');
+app.disable('x-powered-by');
+app.use(express.json());
+
+const client = new MongoClient(uri);
+const collection = client.db(dbName).collection(collectionName);
+collection.createIndex({ hash: 1 });
+collection.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+
+app.use((err, req, res, next) => {
+  if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+    return res.status(400).json(err.message);
+  }
+  next();
+});
+
+app.options('/v1/', (req, res) => {
+  res.setHeader('Access-Control-Max-Age', '1728000').set(corsHeaders).sendStatus(204);
+});
+
+app.post('/v1/', async (req, res) => {
+  const contentType = req.headers['content-type'];
+  if (!contentType || contentType !== 'application/json') {
+    return res.status(415).set(corsHeaders).json("Unsupported media type. Use 'application/json' content type");
   }
 
-  const { stream } = requestBody;
+  const { stream } = req.body;
   if (stream != null && stream !== true && stream !== false) {
-    return new Response('The `stream` parameter must be a boolean value', { status: 400, headers: CORS_HEADERS });
+    return res.status(400).set(corsHeaders).json('The `stream` parameter must be a boolean value');
   }
 
   try {
-    // Enforce the rate limit based on hashed client IP address
     const utcNow = moment.utc();
-    const clientIp = request.headers.get('CF-Connecting-IP');
-    const clientIpHash = await hashIp(clientIp, utcNow, env.SECRET_KEY);
-    const rateLimitKey = `rate_limit_${clientIpHash}`;
-    const rateLimitExpiration = utcNow.startOf('hour').add(1, 'hour').unix();
-    const { rateLimitCount = 0 } = (await env.kv.get(rateLimitKey, { type: 'json' })) || {};
-    if (rateLimitCount > MAX_REQUESTS) {
-      return new Response('Too many requests', { status: 429, headers: CORS_HEADERS });
+    const clientIp = req.connection.remoteAddress;
+    // const clientIp = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    const currentHour = utcNow.format('ddd=DD.MM-HH+YYYY');
+    const expiresAt = utcNow.startOf('hour').add(1, 'hour');
+
+    const authHeader = req.get('Authorization');
+    const shouldRateLimit = !Boolean(authHeader);
+    const authHeaderUpstream = authHeader || `Bearer ${randomChoice(api_keys)}`;
+    const clientIpHash = hashIp(clientIp, currentHour, secretKey);
+
+    let count;
+    if (shouldRateLimit) {
+      ({ count = 0 } = (await collection.findOne({ hash: clientIpHash })) || {});
+      if (count > maxRequests) {
+        return res.status(429).set(corsHeaders).json('Too many requests');
+      }
     }
 
-    // Forward a POST request to the upstream URL and return the response
-    const api_key = randomChoice(JSON.parse(env.API_KEYS));
-    const upstreamResponse = await fetch(UPSTREAM_URL, {
+    const requestHeader = {
+      'Content-Type': 'application/json',
+      'Authorization': authHeaderUpstream,
+      'User-Agent': 'curl/7.64.1',
+    };
+    const resUpstream = await fetch(upstreamUrl, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${api_key}`,
-        'User-Agent': 'curl/7.64.1',
-      },
-      body: JSON.stringify(requestBody),
+      headers: requestHeader,
+      body: JSON.stringify(req.body),
     });
 
-    if (!upstreamResponse.ok) {
-      const { status } = upstreamResponse;
-      const text = await upstreamResponse.text();
+    if (!resUpstream.ok) {
+      const { status } = resUpstream;
+      const text = await resUpstream.text();
       const textObfuscated = obfuscateOpenAIResponse(text);
-      return new Response(`OpenAI API responded with:\n\n${textObfuscated}`, { status, headers: CORS_HEADERS });
+      return res.status(status).set(corsHeaders).json(`OpenAI API responded:\n\n${textObfuscated}`);
     }
 
-    // Update the rate limit information
-    await env.kv.put(rateLimitKey, JSON.stringify({ rateLimitCount: rateLimitCount + 1 }), { expiration: rateLimitExpiration });
-
-    return new Response(upstreamResponse.body, {
-      headers: {
-        ...CORS_HEADERS,
-        ...(stream && STREAM_HEADERS),
-        'Cache-Control': 'no-cache',
-      },
-    });
-  } catch (error) {
-    return new Response(error.message, { status: 500, headers: CORS_HEADERS });
-  }
-};
-
-export default {
-  async fetch(request, env) {
-    const { pathname } = new URL(request.url);
-    if (pathname !== '/v1/') {
-      return new Response('Not found', { status: 404, headers: CORS_HEADERS });
-    }
-
-    if (request.method === 'OPTIONS') {
-      return new Response(null, {
-        headers: {
-          ...CORS_HEADERS,
-          'Access-Control-Max-Age': '1728000',
+    let result;
+    if (shouldRateLimit) {
+      result = await collection.findOneAndUpdate(
+        { hash: clientIpHash },
+        {
+          $inc: { count: 1 },
+          $setOnInsert: { hash: clientIpHash, expiresAt: expiresAt.toDate() },
         },
+        {
+          upsert: true,
+          returnNewDocument: true,
+        }
+      );
+    }
+
+    const contentType = resUpstream.headers.get('content-type');
+    if (contentType) {
+      res.setHeader('Content-Type', contentType);
+    }
+    const contentLength = resUpstream.headers.get('content-length');
+    if (contentLength) {
+      res.setHeader('Content-Length', contentLength);
+    }
+    if (stream) {
+      res.setHeader('Connection', 'keep-alive');
+    }
+    if (shouldRateLimit) {
+      res.set({
+        'RateLimit-Limit': maxRequests,
+        'RateLimit-Remaining': Math.max(0, maxRequests - (result.value?.count ?? 0)),
+        'RateLimit-Reset': expiresAt.unix(),
+        'RateLimit-Policy': `${maxRequests};w=3600`,
       });
     }
+    res.set({
+      ...corsHeaders,
+      'Cache-Control': 'no-cache',
+    });
 
-    if (request.method !== 'POST') {
-      return new Response('Method not allowed', { status: 405, headers: CORS_HEADERS });
-    }
+    resUpstream.body.pipe(res);
+  } catch (error) {
+    res.status(500).set(corsHeaders).json(error.message);
+  }
+});
 
-    const contentType = request.headers.get('Content-Type');
-    if (!contentType || contentType !== 'application/json') {
-      return new Response("Unsupported media type. Use 'application/json' content type", { status: 415, headers: CORS_HEADERS });
-    }
+app.use('*', (req, res) => {
+  res.status(404).set(corsHeaders).json('Not found');
+});
 
-    return handleRequest(request, env);
-  },
-};
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
+});
