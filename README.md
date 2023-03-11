@@ -1,6 +1,24 @@
 # ChatGPT API Free
 
+[简体中文](README-zh_CN.md)
+
 Welcome to the ChatGPT API Free project, a simple and open-source proxy API that allows you to access OpenAI's ChatGPT API for free.
+
+## The Open ChatGPT Initiative
+
+In a world where technology advances at an exponential pace, where the line between man and machine grows increasingly blurred, it is the responsibility of those who have the capability to create, to ensure that the benefits of this progress are shared by all.
+
+With this in mind, I would like to present to you the Open ChatGPT Initiative. A beacon of hope in a world where the potential of AI is limited by the barrier and the cost of entry. A free and open-source proxy API that removes the barriers to accessing the latest AI technology, and makes it available to all.
+
+This project was born from a belief, a belief in a future where the power of artificial intelligence is not reserved for the privileged few, but available to every creator, every innovator, and every dreamer.
+
+It is a belief that technology should serve humanity, not the other way around. A belief that access to the latest advancements should not be determined by one’s technological ability or financial resources, but by one’s creativity, imagination and ambition.
+
+This project does not seek to revolutionise the AI industry, but to democratise it. To make the power of AI accessible to every person, regardless of their background or financial situation. To promote equality, education, and innovation.
+
+It is my sincerest hope that this project will be a catalyst for change, a rallying point for those who believe that the benefits of AI should be shared by all. Join me in this endeavour, and let us create a future where the power of AI belongs to us all.
+
+> If you would like to read another article with more technical details, please read [_Unleashing the Boundlessness of ChatGPT: A Public Appeal_](https://medium.com/@ayaka_45434/unleashing-the-boundlessness-of-chatgpt-a-public-appeal-f1b535a5ca05).
 
 ## News
 
@@ -68,3 +86,18 @@ This project is always seeking ways to improve and welcomes feedback and contrib
 ## Sponsor me!
 
 If you find ChatGPT API Free useful, please consider [sponsoring the author](https://github.com/sponsors/ayaka14732) on GitHub to support ongoing development and maintenance. Your support would help her maintain this project and continue to make AI technology accessible for all. Thank you for your support!
+
+<table>
+  <tr>
+    <th>Ko-fi (Jing Hua)</th>
+    <td><a href="https://ko-fi.com/freechatgpt"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Ko-fi"></a></td>
+  </tr>
+  <tr>
+    <th>Alipay</th>
+    <td><img src="https://ayaka14732.github.io/sponsor/alipay.jpg" alt="Alipay" width="150"></td>
+  </tr>
+  <tr>
+    <th>WeChat Pay</th>
+    <td><img src="https://ayaka14732.github.io/sponsor/wechat.png" alt="WeChat Pay" width="150"></td>
+  </tr>
+</table>
