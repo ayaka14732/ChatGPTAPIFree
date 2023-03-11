@@ -41,7 +41,7 @@ curl https://chatgpt-api.shn.hk/v1/ \
 }'
 ```
 
-您可以在 [OpenAI 官方文档](https://platform.openai.com/docs/api-reference/chat/create)上查看完整的 API 文档。
+您可以在 [OpenAI 官方文档](https://platform.openai.com/docs/api-reference/chat/create)上阅读完整的 API 文档。
 
 ## 介绍
 
@@ -53,7 +53,7 @@ ChatGPT API 是一个强大的工具，允许开发人员将 ChatGPT 模型集�
 
 ## 免费 ChatGPT API 做什么？
 
-这个简单的代理 API 充当您与 OpenAI ChatGPT API 之间的桥梁。您可以使用与原始 API 相同的格式向 ChatGPT API 免费版端点发送请求。该代理 API 将请求转发到 OpenAI API，使用该项目提供的 API 密钥，并将 OpenAI API 的响应返回给您。
+这个简单的代理 API 充当您与 OpenAI ChatGPT API 之间的桥梁。您可以使用与原始 API 相同的格式向 ChatGPT API 免费版端点发送请求。该代理 API 将请求转发至 OpenAI API，使用该项目提供的 API 密钥，并将 OpenAI API 的响应返回给您。
 
 ## 重要性
 
@@ -72,14 +72,14 @@ ChatGPT API 是一个强大的工具，允许开发人员将 ChatGPT 模型集�
 如果您想运行自己的 ChatGPT API 免费版实例，可以按照以下步骤轻松完成：
 
 1. 从 [OpenAI API 密钥](https://platform.openai.com/account/api-keys)获取OpenAI API 密钥。
-2. 在 GitHub 上关注和复制此存储库。
-3. 本地设置 MongoDB 数据库或使用 [MongoDB Atlas](https://www.mongodb.com/atlas/database)。
-4. 正确配置您的环境变量。
+2. 在 GitHub 上 Star 和 Fork 此存储库。
+3. 在本地设置 MongoDB 数据库或使用 [MongoDB Atlas](https://www.mongodb.com/atlas/database)。
+4. 正确配置您的[环境变量](.env.example)。
 5. 在本地部署 Docker 或在 [Google Cloud Run](https://cloud.google.com/run) 上部署。
 
 ## 改进此项目
 
-该项目始终在寻找改进的方法，欢迎用户提供反馈和贡献。如果您有任何建议或想法，请随时在GitHub存储库中创建问题或提交拉取请求。
+该项目始终在寻找改进的方法，欢迎用户提供反馈和贡献。如果您有任何建议或想法，请随时在 GitHub 存储库中创建 Issue 或提交拉取请求。
 
 ## 赞助我！
 
