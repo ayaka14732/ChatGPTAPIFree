@@ -7,17 +7,18 @@ import fetch from 'node-fetch';
 import moment from 'moment';
 import { MongoClient } from 'mongodb';
 
-const port = parseInt(process.env.PORT || '3000', 10);
+const port = parseInt(process.env.PORT || '8080', 10);
 const maxRequests = parseInt(process.env.MAX_REQUESTS || '1024', 10); // maximum number of requests per IP address per hour
 const api_keys = JSON.parse(process.env.API_KEYS);
-const { MONGODB_URI: uri, DB_NAME: dbName, SECRET_KEY: secretKey } = process.env;
-
-const upstreamUrl = 'https://api.openai.com/v1/chat/completions';
+const secretKey = process.env.SECRET_KEY;
+const uri = process.env.MONGODB_URI;
+const dbName = process.env.DB_NAME || 'chatgpt-api';
 const collectionName = 'rate_limits';
+const upstreamUrl = 'https://api.openai.com/v1/chat/completions';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS, BREW',
+  'Access-Control-Allow-Methods': 'GET, HEAD, POST, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 };
 
@@ -26,6 +27,13 @@ const sha256 = (data) => crypto.createHash('sha256').update(data).digest('hex');
 const randomChoice = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 const obfuscateOpenAIResponse = (text) => text.replace(/\borg-[a-zA-Z0-9]{24}\b/g, 'org-************************').replace(' Please add a payment method to your account to increase your rate limit. Visit https://platform.openai.com/account/billing to add a payment method.', '');
+
+const getClientIp = (req) => {
+  const forwardedHeader = req.header('forwarded');
+  const pattern = /for="\[?([^\]"]+)\]?"/;
+  const xForwardedForHeader = req.header('x-forwarded-for');
+  return forwardedHeader?.split(',').pop()?.match(pattern)?.[1] ?? xForwardedForHeader?.split(',').pop() ?? req.socket.remoteAddress;
+};
 
 // Define an async function that hashes user IP address, UTC year, month, day, day of the week, hour and the secret key
 //
@@ -71,8 +79,7 @@ app.post('/v1/', async (req, res) => {
 
   try {
     const utcNow = moment.utc();
-    const clientIp = req.connection.remoteAddress;
-    // const clientIp = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    const clientIp = getClientIp(req);
     const currentHour = utcNow.format('ddd=DD.MM-HH+YYYY');
     const expiresAt = utcNow.startOf('hour').add(1, 'hour');
 
