@@ -57,7 +57,7 @@ collection.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 app.use((err, req, res, next) => {
   if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
-    return res.status(400).type('text/plain').send(err.message);
+    return res.status(400).set(corsHeaders).type('text/plain').send(err.message);
   }
   next();
 });
