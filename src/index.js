@@ -57,7 +57,7 @@ collection.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 app.use((err, req, res, next) => {
   if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
-    return res.status(400).send(err.message);
+    return res.status(400).type('text/plain').send(err.message);
   }
   next();
 });
@@ -69,12 +69,12 @@ app.options('/v1/', (req, res) => {
 app.post('/v1/', async (req, res) => {
   const contentType = req.headers['content-type'];
   if (!contentType || contentType !== 'application/json') {
-    return res.status(415).set(corsHeaders).send("Unsupported media type. Use 'application/json' content type");
+    return res.status(415).set(corsHeaders).type('text/plain').send("Unsupported media type. Use 'application/json' content type");
   }
 
   const { stream } = req.body;
   if (stream != null && stream !== true && stream !== false) {
-    return res.status(400).set(corsHeaders).send('The `stream` parameter must be a boolean value');
+    return res.status(400).set(corsHeaders).type('text/plain').send('The `stream` parameter must be a boolean value');
   }
 
   try {
@@ -92,7 +92,7 @@ app.post('/v1/', async (req, res) => {
     if (shouldRateLimit) {
       ({ count = 0 } = (await collection.findOne({ hash: clientIpHash })) || {});
       if (count > maxRequests) {
-        return res.status(429).set(corsHeaders).send('Too many requests');
+        return res.status(429).set(corsHeaders).type('text/plain').send('Too many requests');
       }
     }
 
@@ -111,7 +111,7 @@ app.post('/v1/', async (req, res) => {
       const { status } = resUpstream;
       const text = await resUpstream.text();
       const textObfuscated = obfuscateOpenAIResponse(text);
-      return res.status(status).set(corsHeaders).send(`OpenAI API responded:\n\n${textObfuscated}`);
+      return res.status(status).set(corsHeaders).type('text/plain').send(`OpenAI API responded:\n\n${textObfuscated}`);
     }
 
     let result;
@@ -155,12 +155,12 @@ app.post('/v1/', async (req, res) => {
 
     resUpstream.body.pipe(res);
   } catch (error) {
-    res.status(500).set(corsHeaders).send(error.message);
+    res.status(500).set(corsHeaders).type('text/plain').send(error.message);
   }
 });
 
 app.use('*', (req, res) => {
-  res.status(404).set(corsHeaders).send('Not found');
+  res.status(404).set(corsHeaders).type('text/plain').send('Not found');
 });
 
 app.listen(port, () => {
