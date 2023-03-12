@@ -22,7 +22,8 @@ It is my sincerest hope that this project will be a catalyst for change, a rally
 
 ## News
 
-**2023-03-04**: Check out the [ChatGPT Free App](https://freechatgpt.chat/), an amazing open-source web application that allows you to interact with OpenAI's ChatGPT API for free. It is built on top of this project.
+- **2023-03-12**: A kind group member sponsored this project with 5000 CNY (724 USD), allowing for continued free access to ChatGPT. Rate limits have been implemented to ensure the API's stability and security. You are welcome to support this project by sponsoring it or hosting your own API endpoint.
+- **2023-03-04**: Check out the [ChatGPT Free App](https://freechatgpt.chat/), an amazing open-source web application that allows you to interact with OpenAI's ChatGPT API for free. It is built on top of this project.
 
 ## Usage
 

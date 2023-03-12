@@ -4,7 +4,8 @@
 
 ## 新闻
 
-**20230304**：请查看 [Free ChatGPT](https://freechatgpt.chat/)，这是一个非常棒的开源 Web 应用，您可以免费使用 OpenAI 的 ChatGPT API。它是基于此项目构建的。
+- **2023-03-12**：热心群友赞助了本项目 5000 元人民币（合 724 美元），使免费 API 可以维持生命。为了确保 API 的稳定性和安全性，已经实施了速率限制。欢迎以赞助或托管自己 API 端点的方式支持本项目。
+- **2023-03-04**：请查看 [Free ChatGPT](https://freechatgpt.chat/)，这是一个非常棒的开源 Web 应用，您可以免费使用 OpenAI 的 ChatGPT API。它是基于此项目构建的。
 
 ## 开放 ChatGPT 倡议
 
