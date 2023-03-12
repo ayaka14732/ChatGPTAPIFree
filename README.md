@@ -89,7 +89,7 @@ If you find ChatGPT API Free useful, please consider [sponsoring the author](htt
 
 <table>
   <tr>
-    <th>Ko-fi (Jing Hua)</th>
+    <th>Ko-fi</th>
     <td><a href="https://ko-fi.com/freechatgpt"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Ko-fi"></a></td>
   </tr>
   <tr>

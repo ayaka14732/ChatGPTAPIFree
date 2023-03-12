@@ -87,7 +87,7 @@ ChatGPT API 是一个强大的工具，允许开发人员将 ChatGPT 模型集�
 
 <table>
   <tr>
-    <th>Ko-fi (Jing Hua)</th>
+    <th>Ko-fi</th>
     <td><a href="https://ko-fi.com/freechatgpt"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Ko-fi"></a></td>
   </tr>
   <tr>
