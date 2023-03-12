@@ -1,6 +1,6 @@
 # ChatGPT API Free
 
-[简体中文版](README-zh_CN.md) - [繁体中文版](README-zh_HK.md)
+[简体中文版](README-zh_CN.md) - [繁體中文版](README-zh_HK.md)
 
 Welcome to the ChatGPT API Free project, a simple and open-source proxy API that allows you to access OpenAI's ChatGPT API for free.
 
@@ -97,7 +97,7 @@ If you find ChatGPT API Free useful, please consider [sponsoring the author](htt
     <td><img src="https://ayaka14732.github.io/sponsor/alipay.jpg" alt="Alipay" width="150"></td>
   </tr>
   <tr>
-    <th>WeChat Pay</th>
-    <td><img src="https://ayaka14732.github.io/sponsor/wechat.png" alt="WeChat Pay" width="150"></td>
+    <th>WeChat</th>
+    <td><img src="https://ayaka14732.github.io/sponsor/wechat.png" alt="WeChat" width="150"></td>
   </tr>
 </table>
