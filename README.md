@@ -75,9 +75,9 @@ If you'd like to run your own instance of ChatGPT API Free, you can easily do so
 
 1. Obtain an OpenAI API Key from [OpenAI API Keys](https://platform.openai.com/account/api-keys).
 1. Star and fork this repository on GitHub.
-1. Set up a MongoDB database locally or use [MongoDB Atlas](https://www.mongodb.com/atlas/database).
 1. Configure your [environment variables](.env.example) correctly.
 1. Deploy Docker locally or on [Google Cloud Run](https://cloud.google.com/run).
+1. Setup rate limit locally or using [Google Cloud Armor](https://cloud.google.com/armor/docs/rate-limiting-overview).
 
 ## Improve this project
 

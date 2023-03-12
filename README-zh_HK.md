@@ -72,10 +72,10 @@ ChatGPT API 是一個強大的工具，允許開發人員將 ChatGPT 模型集�
 如果您想運行自己的 ChatGPT API 免費版實例，可以按照以下步驟輕鬆完成：
 
 1. 從 [OpenAI API 金鑰](https://platform.openai.com/account/api-keys)獲取 OpenAI API 金鑰。
-2. 在 GitHub 上 Star 和 Fork 此存儲庫。
-3. 在本地設定 MongoDB 資料庫或使用 [MongoDB Atlas](https://www.mongodb.com/atlas/database)。
-4. 正確配置您的[環境變數](.env.example)。
-5. 在本地部署 Docker 或在 [Google Cloud Run](https://cloud.google.com/run) 上部署。
+1. 在 GitHub 上 Star 和 Fork 此存儲庫。
+1. 正確配置您的[環境變數](.env.example)。
+1. 在本地部署 Docker 或在 [Google Cloud Run](https://cloud.google.com/run) 上部署。
+1. 在本地設定速率限制或使用 [Google Cloud Armor](https://cloud.google.com/armor/docs/rate-limiting-overview)。
 
 ## 改進此專案
 

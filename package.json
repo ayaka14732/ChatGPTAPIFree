@@ -7,11 +7,8 @@
     "start": "node src/index.js"
   },
   "dependencies": {
-    "crypto": "^1.0.1",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "moment": "^2.29.4",
-    "mongodb": "^5.1.0",
     "node-fetch": "^3.3.0"
   }
 }
