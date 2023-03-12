@@ -51,6 +51,14 @@ app.disable('x-powered-by');
 app.use(express.json());
 
 const client = new MongoClient(uri);
+client.connect((err) => {
+  if (err) {
+    console.error(err);
+    process.exit(1);
+  } else {
+    console.log('Connected successfully to MongoDB at ' + uri);
+  }
+});
 const collection = client.db(dbName).collection(collectionName);
 collection.createIndex({ hash: 1 });
 collection.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 });
@@ -155,7 +163,8 @@ app.post('/v1/', async (req, res) => {
 
     resUpstream.body.pipe(res);
   } catch (error) {
-    res.status(500).set(corsHeaders).type('text/plain').send(error.message);
+    console.error(error);
+    res.status(500).set(corsHeaders).type('text/plain').send('Internal server error');
   }
 });
 
