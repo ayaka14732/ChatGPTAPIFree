@@ -4,6 +4,12 @@
 
 Welcome to the ChatGPT API Free project, a simple and open-source proxy API that allows you to access OpenAI's ChatGPT API for free.
 
+## News
+
+- **2023-03-14**: A kind group member sponsored this project with 400 USD, which enables the free API to run for an even longer period of time.
+- **2023-03-12**: A kind group member sponsored this project with 5000 CNY (724 USD), allowing for continued free access to ChatGPT. Rate limits have been implemented to ensure the API's stability and security. You are welcome to support this project by sponsoring it or hosting your own API endpoint.
+- **2023-03-04**: Check out the [Free ChatGPT](https://freechatgpt.chat/), an amazing open-source web application that allows you to interact with OpenAI's ChatGPT API for free. It is built on top of this project.
+
 ## The Open ChatGPT Initiative
 
 In a world where technology advances at an exponential pace, where the line between man and machine grows increasingly blurred, it is the responsibility of those who have the capability to create, to ensure that the benefits of this progress are shared by all.
@@ -19,11 +25,6 @@ This project does not seek to revolutionise the AI industry, but to democratise 
 It is my sincerest hope that this project will be a catalyst for change, a rallying point for those who believe that the benefits of AI should be shared by all. Join me in this endeavour, and let us create a future where the power of AI belongs to us all.
 
 > If you would like to read another article with more technical details, please read [_Unleashing the Boundlessness of ChatGPT: A Public Appeal_](https://medium.com/@ayaka_45434/unleashing-the-boundlessness-of-chatgpt-a-public-appeal-f1b535a5ca05).
-
-## News
-
-- **2023-03-12**: A kind group member sponsored this project with 5000 CNY (724 USD), allowing for continued free access to ChatGPT. Rate limits have been implemented to ensure the API's stability and security. You are welcome to support this project by sponsoring it or hosting your own API endpoint.
-- **2023-03-04**: Check out the [ChatGPT Free App](https://freechatgpt.chat/), an amazing open-source web application that allows you to interact with OpenAI's ChatGPT API for free. It is built on top of this project.
 
 ## Usage
 
