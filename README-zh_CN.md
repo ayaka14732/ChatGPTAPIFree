@@ -2,6 +2,8 @@
 
 欢迎来到免费 ChatGPT API 项目，这是一个简单且开源的代理 API，您可以免费访问 OpenAI 的 ChatGPT API。
 
+**你一定也会喜欢 [Free ChatGPT](https://freechatgpt.chat/) 网站！**
+
 ## 新闻
 
 - **2023-03-14**：热心群友赞助了本项目 400 美元，使免费 API 能维持更长时间。
