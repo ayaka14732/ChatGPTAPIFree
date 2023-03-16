@@ -4,7 +4,7 @@
 
 Welcome to the ChatGPT API Free project, a simple and open-source proxy API that allows you to access OpenAI's ChatGPT API for free.
 
-**You may want to check out the [Free ChatGPT](https://freechatgpt.chat/) website!**
+**You may want to check out the [Free ChatGPT](https://github.com/ztjhz/FreeChatGPT) website!**
 
 ## News
 
