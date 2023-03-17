@@ -41,7 +41,7 @@ app.post('/v1/', async (req, res) => {
   }
 
   const { stream } = req.body;
-  if (typeof(stream) == "boolean") {
+  if (typeof(stream) != "boolean") {
     return res.status(400).set(corsHeaders).type('text/plain').send('The `stream` parameter must be a boolean value');
   }
 
