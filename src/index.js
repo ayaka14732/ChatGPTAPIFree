@@ -5,16 +5,14 @@ import express from 'express';
 import fetch from 'node-fetch';
 
 const port = parseInt(process.env.PORT || '8080', 10);
-const api_keys = JSON.parse(process.env.API_KEYS);
-const upstreamUrl = 'https://api.openai.com/v1/chat/completions';
+const upstreamUrl1 = 'https://api.openai.com/v1/chat/completions';
+const upstreamUrl2 = 'https://sharegpt.churchless.tech/share/v1/chat';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET, HEAD, POST, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 };
-
-const randomChoice = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 const obfuscateOpenAIResponse = (text) => text.replace(/\borg-[a-zA-Z0-9]{24}\b/g, 'org-************************').replace(' Please add a payment method to your account to increase your rate limit. Visit https://platform.openai.com/account/billing to add a payment method.', '');
 
@@ -45,15 +43,18 @@ const handlePost = async (req, res) => {
     return res.status(400).set(corsHeaders).type('text/plain').send('The `stream` parameter must be a boolean value');
   }
 
-  try {
-    const authHeader = req.get('Authorization');
-    const authHeaderUpstream = authHeader || `Bearer ${randomChoice(api_keys)}`;
+  const authHeader = req.get('Authorization');
+  const upstreamUrl = authHeader ? upstreamUrl1 : upstreamUrl2; // if API key is present, we use the OpenAI API directly
 
-    const requestHeader = {
-      'Content-Type': 'application/json',
-      'Authorization': authHeaderUpstream,
-      'User-Agent': 'curl/7.64.1',
-    };
+  const requestHeader = {
+    'Content-Type': 'application/json',
+    'User-Agent': 'curl/7.64.1',
+  };
+  if (authHeader) {
+    requestHeader['Authorization'] = authHeader;
+  }
+
+  try {
     const resUpstream = await fetch(upstreamUrl, {
       method: 'POST',
       headers: requestHeader,
