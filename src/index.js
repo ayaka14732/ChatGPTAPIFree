@@ -5,7 +5,22 @@ import express from 'express';
 import fetch from 'node-fetch';
 
 const port = parseInt(process.env.PORT || '8080', 10);
-const api_keys = JSON.parse(process.env.API_KEYS);
+const apiKeys = JSON.parse(process.env.API_KEYS);
+const apiKeysPool = new Array(apiKeys.length).fill().map(() => ({
+  apiKey: apiKeys[Math.floor(Math.random() * apiKeys.length)],
+  lastUsed: 0,
+}));
+
+const getApiKeyFromPool = () => {
+  const { apiKey, lastUsed } = apiKeysPool.reduce((prev, curr) => prev.lastUsed < curr.lastUsed ? prev : curr);
+  const now = Date.now();
+  if (now - lastUsed < 1000) {
+    return new Promise((resolve) => setTimeout(() => resolve(getApiKeyFromPool()), 1000 - (now - lastUsed)));
+  }
+  apiKeysPool.find((x) => x.apiKey === apiKey).lastUsed = now;
+  return apiKey;
+};
+
 const upstreamUrl = 'https://api.openai.com/v1/chat/completions';
 
 const corsHeaders = {
@@ -47,7 +62,7 @@ const handlePost = async (req, res) => {
 
   try {
     const authHeader = req.get('Authorization');
-    const authHeaderUpstream = authHeader || `Bearer ${randomChoice(api_keys)}`;
+    const authHeaderUpstream = authHeader || `Bearer ${getApiKeyFromPool()}`;
 
     const requestHeader = {
       'Content-Type': 'application/json',
