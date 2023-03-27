@@ -8,6 +8,7 @@ Welcome to the ChatGPT API Free project, a simple and open-source proxy API that
 
 ## News
 
+- **2023-03-26**: It is with a heavy heart that I announce the archiving of the ChatGPTAPIFree repository. Our endeavour to provide a free API for all has reached an unsustainable financial crossroad, prompting a temporary halt in our pursuit of equal access to AI technology. Despite this setback, our commitment remains unwavering. We will continue to explore alternative methods and advocate for OpenAI to lower their API pricing and remove regional restrictions. While our progress may have slowed, our resolve to create a world where the power of AI is accessible to all is stronger than ever.
 - **2023-03-14**: A kind group member sponsored this project with 400 USD, which enables the free API to run for an even longer period of time.
 - **2023-03-12**: A kind group member sponsored this project with 5000 CNY (724 USD), allowing for continued free access to ChatGPT. Rate limits have been implemented to ensure the API's stability and security. You are welcome to support this project by sponsoring it or hosting your own API endpoint.
 - **2023-03-04**: Check out the [Free ChatGPT](https://freechatgpt.chat/), an amazing open-source web application that allows you to interact with OpenAI's ChatGPT API for free. It is built on top of this project.
