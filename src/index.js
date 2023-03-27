@@ -41,7 +41,7 @@ const handlePost = async (req, res) => {
   }
 
   const { stream } = req.body;
-  if (stream != null && stream !== true && stream !== false) {
+  if (typeof(stream) != "boolean") {
     return res.status(400).set(corsHeaders).type('text/plain').send('The `stream` parameter must be a boolean value');
   }
 
